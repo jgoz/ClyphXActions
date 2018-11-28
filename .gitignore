@@ -102,3 +102,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# allow this ClyphX file
+!__init__.pyc
