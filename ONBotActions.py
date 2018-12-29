@@ -7,6 +7,7 @@ class ONBotActions(UserActionsBase):
     def create_actions(self):
         self.add_global_action('cue', self.cue_next_action)
         self.add_global_action('lfu', self.loop_from_until_action)
+        self.add_global_action('playloop', self.play_or_loop_toggle)
 
     def cue_next_action(self, action_def, args):
         """ Stops playback and moves the insert marker to the next cue point. """
@@ -22,3 +23,12 @@ class ONBotActions(UserActionsBase):
         clyph = self.canonical_parent.clyphx_pro_component
         parts = args.split()
         clyph.trigger_action_list('loop %s ; loop >%s ; loop on' % (parts[1], parts[0]))
+
+    def play_or_loop_toggle(self, action_def, args):
+        """ Plays when stopped, or toggles loop on/off when playing. """
+        song = self.song()
+        clyph = self.canonical_parent.clyphx_pro_component
+        if song.is_playing:
+            clyph.trigger_action_list('loop')
+        else:
+            song.start_playing()
